@@ -34,17 +34,26 @@ fn read_input_file() -> Result<Vec<u8>> {
     return Ok(data);
 }
 
-fn count_increases(vec: &Vec<u8>) {
+fn count_increases(vec: &Vec<u8>) -> i32 {
+    let mut count = 0;
     for i in 0..vec.len() {
         let current_value = vec[i];
+        println!("Test current value");
+        println!("{}", current_value);
         if i != 0 {
-            let previous_value = vec[i - 0];
-            println!("Current Value: {}, Previous Value: {}", current_value, previous_value);
+            let previous_value = vec[i - 1];
+            println!("Current: {}, Previous: {}", current_value, previous_value);
+            if current_value > previous_value {
+                count += 1;
+            }
         }
     }
+
+    return count;
 }
 
 fn main() {
     let data = read_input_file();
-    count_increases(&data.unwrap());
+    let count = count_increases(&data.unwrap());
+    println!("Final Count: {}", count);
 }
