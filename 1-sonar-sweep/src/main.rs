@@ -1,5 +1,5 @@
 use std::fs::{File};
-use std::io::{Read, Result};
+use std::io::{BufRead, BufReader, Read, Result};
 
 
 /// https://adventofcode.com/2021/day/1
@@ -38,11 +38,11 @@ fn count_increases(vec: &Vec<u8>) -> i32 {
     let mut count = 0;
     for i in 0..vec.len() {
         let current_value = vec[i];
-        println!("Test current value");
+        // println!("Test current value");
         println!("{}", current_value);
         if i != 0 {
             let previous_value = vec[i - 1];
-            println!("Current: {}, Previous: {}", current_value, previous_value);
+            // println!("Current: {}, Previous: {}", current_value, previous_value);
             if current_value > previous_value {
                 count += 1;
             }
@@ -52,8 +52,22 @@ fn count_increases(vec: &Vec<u8>) -> i32 {
     return count;
 }
 
+/// https://stackoverflow.com/questions/65100493/how-to-read-a-list-of-numbers-from-a-file-into-a-vec
+fn load_from_file() -> Vec<i64> {
+    let file = File::open("input.txt").expect("file was not found");
+    let reader = BufReader::new(file);
+    let numbers: Vec<i64> = reader
+        .lines()
+        .map(|line| line.unwrap().parse::<i64>().unwrap())
+        .collect();
+
+    return numbers;
+}
+
 fn main() {
     let data = read_input_file();
     let count = count_increases(&data.unwrap());
     println!("Final Count: {}", count);
+    let from_file = load_from_file();
+    println!("{:?}", from_file);
 }
