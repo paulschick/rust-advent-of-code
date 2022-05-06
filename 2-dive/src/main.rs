@@ -1,3 +1,8 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+
+mod instructions;
+
 use std::fs::{File};
 use std::io::{prelude::*, BufReader};
 
@@ -12,7 +17,11 @@ use std::io::{prelude::*, BufReader};
 ///
 ///That's all. No backwards or anything
 ///
-///
+
+//struct Instruction {
+//    direction: String,
+//    magnitude: i8,
+//}
 
 // https://stackoverflow.com/questions/30801031/read-a-file-and-get-an-array-of-strings
 fn read_from_file() -> Vec<String> {
