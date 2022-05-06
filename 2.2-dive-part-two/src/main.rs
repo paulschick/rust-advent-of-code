@@ -47,9 +47,9 @@ pub mod position_management {
 
     #[derive(Debug)]
     pub struct Position {
-        pub horizontal: Cell<i16>,
-        pub depth: Cell<i16>,
-        aim: Cell<i16>,
+        pub horizontal: Cell<i64>,
+        pub depth: Cell<i64>,
+        aim: Cell<i64>,
     }
 
     impl Position {
@@ -61,23 +61,42 @@ pub mod position_management {
             };
         }
 
+        pub fn parse_instructions(&mut self, instructions: &Vec<(String, i8)>) {
+            let forward = String::from("forward");
+            let up = String::from("up");
+            let down = String::from("down");
+            
+            for ins in instructions {
+                if ins.0.eq(&forward) {
+                    println!("Forward -> {}", ins.1);
+                    self.parse_forward(i64::from(ins.1));
+                } else if ins.0.eq(&up) {
+                    println!("Up -> {}", ins.1);
+                    self.parse_up(i64::from(ins.1));
+                } else if ins.0.eq(&down) {
+                    println!("Down -> {}", ins.1);
+                    self.parse_down(i64::from(ins.1));
+                }
+            }
+        }
+
         /// increase horizontal position by val
         /// increases depth by aim * x
         /// make private
-        pub fn parse_forward(&mut self, val: i16) {
+        pub fn parse_forward(&mut self, val: i64) {
             self.horizontal.set(self.horizontal.get() + val);
             self.depth.set(self.depth.get() + (val * self.aim.get()));
         }
 
         /// decreases aim by val
         /// make private
-        pub fn parse_up(&mut self, val: i16) {
+        pub fn parse_up(&mut self, val: i64) {
             self.aim.set(self.aim.get() - val);
         }
 
         /// increases aim by val
         /// make private
-        pub fn parse_down(&mut self, val: i16) {
+        pub fn parse_down(&mut self, val: i64) {
             self.aim.set(self.aim.get() + val);
         }
     }
@@ -93,14 +112,11 @@ fn main() {
     let mut pos = Position::new();
     println!("{:?}", pos);
 
-    pos.parse_forward(10i16);
+    pos.parse_instructions(&directions);
+
+    println!("Final Values");
     println!("{:?}", pos);
-    pos.parse_down(10i16);
-    println!("{:?}", pos);
-    pos.parse_forward(8i16);
-    println!("{:?}", pos);
-    pos.parse_up(4i16);
-    println!("{:?}", pos);
-    pos.parse_forward(8i16);
-    println!("{:?}", pos);
+
+    let mult = pos.horizontal.get() * pos.depth.get();
+    println!("Multiple value: {}", mult);
 }
