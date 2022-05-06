@@ -1,3 +1,6 @@
+
 fn main() {
-    println!("Hello, world!");
+    env_logger::init();
+    println!("hello");
+    log::warn!("[warn] hello");
 }
