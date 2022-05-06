@@ -1,3 +1,6 @@
+use std::fs::{File};
+use std::io::{prelude::*, BufReader};
+
 /// https://adventofcode.com/2021/day/2
 /// use input.txt
 ///
@@ -10,6 +13,20 @@
 ///That's all. No backwards or anything
 ///
 ///
+
+// https://stackoverflow.com/questions/30801031/read-a-file-and-get-an-array-of-strings
+fn read_from_file() -> Vec<String> {
+    let file = File::open("input.txt").expect("no such file");
+    let buf = BufReader::new(file);
+    return buf.lines()
+        .map(|l| l.expect("Could not parse lines"))
+        .collect();
+}
+
+
 fn main() {
-    println!("Hello, world!");
+    let lines = read_from_file();
+    for line in lines {
+        println!("{:?}", line);
+    }
 }
