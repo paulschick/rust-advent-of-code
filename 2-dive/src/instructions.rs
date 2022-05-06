@@ -1,7 +1,29 @@
+use std::fs::{File};
+use std::io::{prelude::*, BufReader};
+
 #[derive(Debug)]
 pub struct Instruction {
     direction: String,
     magnitude: i8,
+}
+
+fn read_from_file() -> Vec<String> {
+    let file = File::open("input.txt").expect("no such file");
+    let buf = BufReader::new(file);
+    return buf.lines()
+        .map(|l| l.expect("Could not parse lines"))
+        .collect();
+}
+
+pub fn parse_instructions() -> Vec<Instruction> {
+    let direction_lines = read_from_file();
+    let mut data: Vec<Instruction> = Vec::new();
+    for line in direction_lines {
+        let instruction = Instruction::new(&line); 
+        data.push(instruction);
+    }
+
+    return data;
 }
 
 impl Instruction {
