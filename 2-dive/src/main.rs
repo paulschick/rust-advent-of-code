@@ -23,10 +23,16 @@ fn read_from_file() -> Vec<String> {
         .collect();
 }
 
+fn split_by_space(words: &String) -> Vec<&str> {
+    return words.split(" ").collect();
+}
+
 
 fn main() {
     let lines = read_from_file();
     for line in lines {
         println!("{:?}", line);
+        let strings = split_by_space(&line);
+        println!("From main -> {}, {}", strings[0], strings[1]);
     }
 }
