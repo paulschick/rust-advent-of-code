@@ -40,6 +40,7 @@ impl Instruction {
 
     fn split_by_space(words: &String) -> Vec<&str> {
         return words.split(" ").collect();
+    println!("{:?}", file);
     }
 
     /// Takes a string slice
