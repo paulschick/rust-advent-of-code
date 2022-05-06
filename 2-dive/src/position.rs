@@ -1,4 +1,5 @@
 use std::cell::Cell;
+use crate::instructions::Instruction;
 
 #[derive(Debug)]
 pub struct Position {
@@ -8,8 +9,6 @@ pub struct Position {
 
 impl Position {
     pub fn new() -> Self {
-        //horizontal: 0,
-        //depth: 0,
         return Position {
             horizontal: Cell::new(0),
             depth: Cell::new(0),
@@ -34,5 +33,21 @@ impl Position {
 
     pub fn parse_up(&mut self, val: i8) {
         self.depth.set(self.depth.get() - i16::from(val));
+    }
+
+    pub fn parse_instructions_vec(&mut self, instructions: &[Instruction]) {
+        let forward = String::from("forward");
+        let up = String::from("up");
+        let down = String::from("down");
+        
+        for ins in instructions.iter() {
+            if ins.direction.eq(&forward) {
+                println!("found a forward -> {}: {}", ins.direction, ins.magnitude);
+            } else if ins.direction.eq(&up) {
+                println!("Found an up!! -> {}: {}", ins.direction, ins.magnitude);
+            } else if ins.direction.eq(&down) {
+                println!("Found a Down!! -> {}: {}", ins.direction, ins.magnitude);
+            }
+        }
     }
 }

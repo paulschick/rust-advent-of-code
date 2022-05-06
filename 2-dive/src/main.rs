@@ -4,7 +4,6 @@
 mod instructions;
 mod position;
 
-//use crate::instructions::{Instruction, parse_instructions};
 use crate::instructions::{parse_instructions};
 use crate::position::Position;
 
@@ -13,9 +12,6 @@ use crate::position::Position;
 
 fn main() {
     let my_vecs = parse_instructions();
-    for v in my_vecs {
-        println!("{:?}", v);
-    }
 
     println!("Testing Position struct method");
     let mut pos = Position::new();
@@ -44,4 +40,7 @@ fn main() {
     println!("Move up -> {}", up1);
     pos.parse_up(up1);
     println!("{:?}", pos);
+
+    let instructions_slice = &my_vecs[..];
+    pos.parse_instructions_vec(instructions_slice);
 }

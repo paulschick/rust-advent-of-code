@@ -1,10 +1,10 @@
 use std::fs::{File};
 use std::io::{prelude::*, BufReader};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Instruction {
-    direction: String,
-    magnitude: i8,
+    pub direction: String,
+    pub magnitude: i8,
 }
 
 fn read_from_file() -> Vec<String> {
