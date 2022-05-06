@@ -15,4 +15,24 @@ impl Position {
             depth: Cell::new(0),
         };
     }
+
+    pub fn update_horizontal(&mut self, val: i16) {
+        self.horizontal.set(val);
+    }
+
+    pub fn update_depth(&mut self, val: i16) {
+        self.depth.set(val);
+    }
+
+    pub fn parse_forward(&mut self, val: i8) {
+        self.horizontal.set(self.horizontal.get() + i16::from(val));
+    }
+
+    pub fn parse_down(&mut self, val: i8) {
+        self.depth.set(self.depth.get() + i16::from(val));
+    }
+
+    pub fn parse_up(&mut self, val: i8) {
+        self.depth.set(self.depth.get() - i16::from(val));
+    }
 }
