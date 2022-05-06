@@ -39,15 +39,31 @@ impl Position {
         let forward = String::from("forward");
         let up = String::from("up");
         let down = String::from("down");
+
+        println!("Starting Values");
+        println!("{:?}", self);
         
         for ins in instructions.iter() {
             if ins.direction.eq(&forward) {
                 println!("found a forward -> {}: {}", ins.direction, ins.magnitude);
+                self.parse_forward(ins.magnitude);
+                println!("{:?}", self);
             } else if ins.direction.eq(&up) {
                 println!("Found an up!! -> {}: {}", ins.direction, ins.magnitude);
+                self.parse_up(ins.magnitude);
+                println!("{:?}", self);
             } else if ins.direction.eq(&down) {
                 println!("Found a Down!! -> {}: {}", ins.direction, ins.magnitude);
+                self.parse_down(ins.magnitude);
+                println!("{:?}", self);
             }
         }
+
+        println!("Final Values:");
+        println!("{:?}", self);
+        let horiz: i64 = i64::from(self.horizontal.get());
+        let depth_64: i64 = i64::from(self.depth.get());
+        println!("horiz: {}, depth: {}", horiz, depth_64);
+        println!("{}", horiz * depth_64);
     }
 }
