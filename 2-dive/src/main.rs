@@ -27,6 +27,13 @@ fn split_by_space(words: &String) -> Vec<&str> {
     return words.split(" ").collect();
 }
 
+/// For now, this is just parsing &str -> int8
+/// Takes a string slice
+/// Attempts to return an i8
+fn parse_magnitude(magnitude: &str) -> i8 {
+    return magnitude.to_string().parse::<i8>().unwrap();
+}
+
 
 fn main() {
     let lines = read_from_file();
@@ -34,5 +41,7 @@ fn main() {
         println!("{:?}", line);
         let strings = split_by_space(&line);
         println!("From main -> {}, {}", strings[0], strings[1]);
+        let magnitude = parse_magnitude(&strings[1]);
+        println!("Parsed to i8 -> {}", magnitude);
     }
 }
