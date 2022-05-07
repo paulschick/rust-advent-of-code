@@ -53,34 +53,29 @@ pub mod nested_array {
     /// bool - 1 = true, 0 = false
     /// Implementation:
     /// https://stackoverflow.com/questions/13212212/creating-two-dimensional-arrays-in-rust
-    // pub fn create_array(file_data: &Vec<String>) -> Vec<Vec<bool>> {
-    pub fn create_array(file_data: &Vec<String>) {
+    pub fn create_array(file_data: &Vec<String>) -> Vec<Vec<bool>> {
         let height = file_data.len();
         let first_val = &file_data[0];
         let width = first_val.len();
-        // let mut grid_raw = vec![0; width * height];
-        // return vec![vec![true; width]; height];
-        // Works, now I need to change it from all true to have
-        // true for 1 and false for 0
-
         let mut array = vec![vec![true; width]; height];
+        let mut data_array: Vec<Vec<bool>> = vec![];
+
         for (i, row) in array.iter_mut().enumerate() {
+
             let current_string = &file_data[i];
             let mut line_vec: Vec<bool> = vec![];
 
-            println!("Current String -> {}", current_string);
-
             for (j, col) in row.iter_mut().enumerate() {
                 let current_char = current_string.chars().nth(j).unwrap();
-                println!("Current Char -> {}", current_char);
                 if current_char == '1' {
                     line_vec.push(true);
                 } else {
                     line_vec.push(false);
                 }
             }
-            println!("Vector of bools -> {:?}", line_vec);
+            data_array.push(line_vec);
         }
+        return data_array;
     }
 }
 
@@ -101,7 +96,6 @@ fn main() {
     let width = first_val.len();
     println!("{}", width);
 
-    // let array = nested_array::create_array(&file_vec);
-    // println!("{:?}", &array);
-    nested_array::create_array(&file_vec);
+    let array = nested_array::create_array(&file_vec);
+    println!("{:?}", array);
 }
