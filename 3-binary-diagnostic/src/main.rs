@@ -1,40 +1,6 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
-use std::env;
-// use std::fs::{File, OpenOptions};
-// use std::io::{Write, Error};
-use env_logger::{Builder, Target};
-
-// #[macro_use]
-// extern crate log;
-
-fn init_logger() {
-    // log without calling from command line
-    env::set_var("RUST_LOG", "info");
-    let mut builder = Builder::from_default_env();
-    builder.target(Target::Stdout);
-    builder.init();
-}
-
-// fn write_log() -> Result<(), Error> {
-//     let path = "test-log.log";
-//     let mut output = File::create(path)?;
-//     write!(output, "Hello from this program\n")?;
-//
-//     return Ok(());
-// }
-//
-// fn append_file() {
-//     let mut file = OpenOptions::new()
-//         .append(true)
-//         .open("test-log.log")
-//         .expect("unable to open file");
-//     file.write_all("Hello from a new line\n".as_bytes())
-//         .expect("write failed");
-//     println!("Success");
-// }
-
 pub mod file_contents {
     use std::fs::File;
     use std::io::{prelude::*, BufReader};
@@ -178,6 +144,52 @@ pub mod tests {
     }
 }
 
+/// Formula to calculate a decimal from a binary number:
+/// https://www.rapidtables.com/convert/number/binary-to-decimal.html
+///
+/// the decimal number is equal to the sum of the binary digits times their power of 2 (2^n)
+/// To make it tougher, you have to go backwards... Basically "flip the bits".
+///
+/// if my number is 111001
+/// the this as powers of 2 is: 1(2^5)1(2^4)1(2^3)0(2^2)0(2^1)1(2^0)
+/// So the first number gets the highest power
+/// And the highest power is length - 1, because there's a 0 index
+fn convert_bin_to_decimal() {
+    let my_string: String = "111001".to_owned();
+    println!("Converting {}", my_string);
+    let highest_power = my_string.len() - 1;
+    println!("Highest power -> {}", highest_power);
+
+    let mut decimal_value: u32 = 0;
+
+    // include the highest number
+    for i in 0..=highest_power {
+        println!("Current index {}", i);
+        let current_power = highest_power - i;
+        println!("Current power {}", current_power);
+
+        let binary_char = my_string.chars().nth(i).unwrap();
+        println!("Current binary char -> {}", binary_char);
+
+        let base: u32 = 2;
+        let base_power = base.pow(current_power.try_into().unwrap());
+        println!("Base: {}, Base to power of {}: {}", base, current_power, base_power);
+
+        let binary_int: u32 = binary_char.to_digit(10).unwrap();
+        println!("Binary Int: {}", binary_int);
+
+        println!("{} * {}", binary_int, base_power);
+
+        let current_binary_result = binary_int * base_power;
+        println!("{}", current_binary_result);
+
+        decimal_value += current_binary_result;
+        println!("Current Decimal Value: {}", decimal_value);
+    }
+
+    println!("Final Decimal Value: {}", decimal_value);
+}
+
 fn main() {
     // init_logger();
     println!("Getting file contents");
@@ -192,4 +204,6 @@ fn main() {
     let epsilon_string = create_binary_string(&epsilon);
 
     println!("Gamma string: {}, epsilon string: {}", gamma_string, epsilon_string);
+
+    convert_bin_to_decimal();
 }
