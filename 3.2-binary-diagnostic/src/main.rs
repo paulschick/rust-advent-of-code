@@ -102,7 +102,7 @@ fn get_max_in_col(values: &Vec<String>, col_index: u32) -> u32 {
         }
     }
 
-    if num_1 > num_0 {
+    if num_1 >= num_0 {
         return 1u32;
     } else {
         return 0u32;
