@@ -109,6 +109,21 @@ fn get_max_in_col(values: &Vec<String>, col_index: u32) -> u32 {
     }
 }
 
+///
+///num_to_keep -> 1 or 0
+fn trim_rows(values: &Vec<String>, col_index: u32, num_to_keep: u32) -> Vec<String> {
+    let mut return_vec: Vec<String> = vec![];
+    let length = values.len();
+    for i in 0..length {
+        let row = &values[i];
+        let current_val = get_val_from_row(&row, col_index);
+        if current_val == num_to_keep {
+            return_vec.push(row.to_owned());
+        }
+    }
+    return return_vec;
+}
+
 fn get_oxygen_rating(values: &Vec<String>, col_index: u32) -> Vec<String> {
     let row_length = values.len();
     let col_length = &values[0].len();
@@ -121,31 +136,13 @@ fn get_oxygen_rating(values: &Vec<String>, col_index: u32) -> Vec<String> {
     } else {
         // continue
         println!("continuing");
-        let mut new_vec: Vec<String> = vec![];
+        let new_vec: Vec<String>;
 
         let max_num = get_max_in_col(&values, col_index);
         if max_num == 1u32 {
-            for a in 0..row_length {
-                let row = &values[a];
-                let current_val = get_val_from_row(
-                    &row,
-                    col_index
-                );
-                if current_val == 1u32 {
-                    new_vec.push(row.to_owned());
-                }
-            }
+            new_vec = trim_rows(&values, col_index, 1u32);
         } else {
-            for a in 0..row_length {
-                let row = &values[a];
-                let current_val = get_val_from_row(
-                    &row,
-                    col_index
-                );
-                if current_val == 0u32 {
-                    new_vec.push(row.to_owned());
-                }
-            }
+            new_vec = trim_rows(&values, col_index, 0u32);
         }
 
         let next_index = col_index + 1u32;
@@ -157,6 +154,13 @@ fn get_oxygen_rating(values: &Vec<String>, col_index: u32) -> Vec<String> {
             return copy_vec(&new_vec);
         }
     }
+}
+
+fn get_scrubber_rating(oxygen_rating: &Vec<String>) -> Vec<String> {
+
+
+    // return test
+    vec!["Hello".to_owned()]
 }
 
 fn get_decimal(values: &Vec<u32>) -> u32 {
@@ -178,4 +182,6 @@ fn main() {
     let oxygen_rating = get_oxygen_rating(&contents, 0u32);
     println!("{:?}", oxygen_rating);
     println!("Length -> {}", oxygen_rating[0].len());
+    let scrubber_rating = get_scrubber_rating(&oxygen_rating);
+    println!("Scrubber Rating -> {:?}", scrubber_rating);
 }
