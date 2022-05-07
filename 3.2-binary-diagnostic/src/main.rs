@@ -124,18 +124,17 @@ fn trim_rows(values: &Vec<String>, col_index: u32, num_to_keep: u32) -> Vec<Stri
     return return_vec;
 }
 
-fn get_oxygen_rating(values: &Vec<String>, col_index: u32) -> Vec<String> {
+fn get_oxygen_rating(values: &Vec<String>, col_index: u32) -> String {
     let row_length = values.len();
     let col_length = &values[0].len();
 
     // compare &usize to &usize
     let test_len = usize::try_from(1).unwrap();
     if col_length == &test_len {
-        // return values;
-        return copy_vec(values);
+        let final_vec = copy_vec(values);
+        return final_vec[0].to_owned();
     } else {
         // continue
-        println!("continuing");
         let new_vec: Vec<String>;
 
         let max_num = get_max_in_col(&values, col_index);
@@ -151,16 +150,26 @@ fn get_oxygen_rating(values: &Vec<String>, col_index: u32) -> Vec<String> {
             let next_vec = copy_vec(&new_vec);
             return get_oxygen_rating(&next_vec, next_index);
         } else {
-            return copy_vec(&new_vec);
+            let final_vec = copy_vec(&new_vec);
+            return final_vec[0].to_owned();
         }
     }
 }
 
-fn get_scrubber_rating(oxygen_rating: &Vec<String>) -> Vec<String> {
+fn get_scrubber_rating(oxygen: &str) -> String {
+    let length = &oxygen.len();
+    let mut owned_string: String = "".to_owned();
 
-
-    // return test
-    vec!["Hello".to_owned()]
+    for i in 0..*length {
+        let curr_char = &oxygen.chars().nth(i).unwrap();
+        let curr_digit: u32 = curr_char.to_digit(10).unwrap();
+        if curr_digit == 1u32 {
+            owned_string.push_str("0");
+        } else {
+            owned_string.push_str("1");
+        }
+    }
+    return owned_string;
 }
 
 fn get_decimal(values: &Vec<u32>) -> u32 {
@@ -180,8 +189,7 @@ fn get_decimal(values: &Vec<u32>) -> u32 {
 fn main() {
     let contents: Vec<String> = file_contents::file_input();
     let oxygen_rating = get_oxygen_rating(&contents, 0u32);
-    println!("{:?}", oxygen_rating);
-    println!("Length -> {}", oxygen_rating[0].len());
+    println!("Oxygen Rating -> {}", oxygen_rating);
     let scrubber_rating = get_scrubber_rating(&oxygen_rating);
-    println!("Scrubber Rating -> {:?}", scrubber_rating);
+    println!("Scrubber Rating -> {}", scrubber_rating);
 }
