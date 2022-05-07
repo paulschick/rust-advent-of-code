@@ -102,6 +102,20 @@ pub mod nested_array {
         }
         return return_array;
     }
+
+    pub fn epsilon_vec(gamma: &Vec<i8>) -> Vec<i8> {
+        let length = gamma.len();
+        let mut epsilon: Vec<i8> = vec![];
+
+        for i in 0..length {
+            if *&gamma[i] == 1 {
+                epsilon.push(0i8);
+            } else {
+                epsilon.push(1i8);
+            }
+        }
+        return epsilon;
+    }
 }
 
 fn main() {
@@ -116,4 +130,6 @@ fn main() {
     let mut array = nested_array::create_array(&file_vec);
     let gamma_vec = nested_array::columns_most_common(&mut array);
     println!("Received gamma vec -> {:?}", gamma_vec);
+    let epsilon = nested_array::epsilon_vec(&gamma_vec);
+    println!("Received epsilon vec -> {:?}", epsilon);
 }
