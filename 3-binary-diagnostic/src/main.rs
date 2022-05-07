@@ -118,8 +118,17 @@ pub mod nested_array {
     }
 }
 
+fn create_binary_string(data: &Vec<i8>) -> String {
+    let mut bin_string: String = "".to_owned();
+    for i in 0..data.len() {
+        bin_string.push_str(&data[i].to_string());
+    }
+    return bin_string;
+}
+
 #[cfg(test)]
 pub mod tests {
+    use super::*;
     use crate::file_contents;
     use crate::nested_array;
 
@@ -159,8 +168,15 @@ pub mod tests {
         let actual_epsilon = nested_array::epsilon_vec(&gamma);
         assert_eq!(actual_epsilon, expected);
     }
-}
 
+    #[test]
+    fn binary_string_conversion() {
+        let gamma = vec![0i8, 1i8, 0i8, 0i8];
+        let expected: String = "0100".to_owned();
+        let resulted: String = create_binary_string(&gamma);
+        assert_eq!(resulted, expected);
+    }
+}
 
 fn main() {
     // init_logger();
@@ -171,4 +187,9 @@ fn main() {
     println!("Received gamma vec -> {:?}", gamma_vec);
     let epsilon = nested_array::epsilon_vec(&gamma_vec);
     println!("Received epsilon vec -> {:?}", epsilon);
+
+    let gamma_string = create_binary_string(&gamma_vec);
+    let epsilon_string = create_binary_string(&epsilon);
+
+    println!("Gamma string: {}, epsilon string: {}", gamma_string, epsilon_string);
 }
