@@ -77,6 +77,31 @@ pub mod nested_array {
         }
         return data_array;
     }
+
+    pub fn columns_most_common(data: &mut Vec<Vec<bool>>) -> Vec<i8> {
+        let col_length = *&data[0].len();
+        let row_length = *&data.len();
+        let mut return_array: Vec<i8> = vec![];
+
+        for i in 0..col_length {
+            let mut num_true = 0;
+            let mut num_false = 0;
+
+            for a in 0..row_length {
+                if &data[a][i] == &true {
+                    num_true += 1;
+                } else {
+                    num_false += 1;
+                }
+            }
+            if num_true > num_false {
+                return_array.push(1i8);
+            } else {
+                return_array.push(0i8);
+            }
+        }
+        return return_array;
+    }
 }
 
 fn main() {
@@ -88,14 +113,7 @@ fn main() {
     // append_file();
     println!("Getting file contents");
     let file_vec = file_contents::file_input();
-    println!("{:?}", file_vec);
-    println!("{}", file_vec.len());
-    println!("{}", &file_vec[0]);
-
-    let first_val = &file_vec[0];
-    let width = first_val.len();
-    println!("{}", width);
-
-    let array = nested_array::create_array(&file_vec);
-    println!("{:?}", array);
+    let mut array = nested_array::create_array(&file_vec);
+    let gamma_vec = nested_array::columns_most_common(&mut array);
+    println!("Received gamma vec -> {:?}", gamma_vec);
 }
