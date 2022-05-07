@@ -190,4 +190,7 @@ fn main() {
     println!("Gamma Decimal - {}", gamma_decimal);
     let epsilon_decimal = convert_bin_to_decimal(&epsilon_string);
     println!("Epsilon Decimal - {}", epsilon_decimal);
+
+    let final_result = gamma_decimal * epsilon_decimal;
+    println!("Final Result: {}", final_result);
 }
