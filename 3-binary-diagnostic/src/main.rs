@@ -118,13 +118,52 @@ pub mod nested_array {
     }
 }
 
+#[cfg(test)]
+pub mod tests {
+    use crate::file_contents;
+    use crate::nested_array;
+
+    #[test]
+    fn test_bit_width() {
+        let file_vec = file_contents::file_input();
+        let first_value = &file_vec[0];
+        let real_width = first_value.len();
+        assert_eq!(real_width, 12);
+    }
+
+    #[test]
+    fn test_create_array() {
+        let file_vec = file_contents::file_input();
+        let expected_nested_length = file_vec.len();
+        let array = nested_array::create_array(&file_vec);
+        let received_length = array.len();
+        assert_eq!(expected_nested_length, received_length);
+    }
+
+    #[test]
+    fn test_gamma_value() {
+        let row1 = vec![true, true, false, true];
+        let row2 = vec![false, true, false, false];
+        let row3 = vec![false, true, false, false];
+        let mut test_vector = vec![row1, row2, row3];
+        assert_eq!(test_vector.len(), 3);
+        let gamma = nested_array::columns_most_common(&mut test_vector);
+        let expected = vec![0i8, 1i8, 0i8, 0i8];
+        assert_eq!(gamma, expected);
+    }
+
+    #[test]
+    fn test_epsilon_value() {
+        let gamma = vec![0i8, 1i8, 0i8, 0i8];
+        let expected = vec![1i8, 0i8, 1i8, 1i8];
+        let actual_epsilon = nested_array::epsilon_vec(&gamma);
+        assert_eq!(actual_epsilon, expected);
+    }
+}
+
+
 fn main() {
-    init_logger();
-    // info!("Starting");
-    // info!("hello");
-    // warn!("warning you");
-    // write_log().unwrap();
-    // append_file();
+    // init_logger();
     println!("Getting file contents");
     let file_vec = file_contents::file_input();
     let mut array = nested_array::create_array(&file_vec);

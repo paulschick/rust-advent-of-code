@@ -64,3 +64,8 @@ So one of the nested arrays contains each of the bits in a single binary string.
 Width -> equal to the number of characters in one string of bits
 Length -> equal to the number of bit strings. the length of the vec created when the file is read.
 
+## Converting a vector of bits into a decimal
+
+This is the last step in terms of things that I have no idea how to do. I need to take the 12
+1's and 0's and turn them into a decimal. Then multiply the two numbers and return that value.
+
