@@ -61,9 +61,31 @@ fn get_epsilon(gamma: &Vec<u32>) -> Vec<u32> {
     return ep;
 }
 
+fn get_decimal(values: &Vec<u32>) -> u32 {
+    let highest_power = values.len() - 1;
+    let mut val: u32 = 0;
+    for i in 0..=highest_power {
+        let power = highest_power - i;
+        let base: u32 = 2;
+        let powered_base = base.pow(power.try_into().unwrap());
+        let curr_binary: u32 = values[i];
+        let curr_result = curr_binary * powered_base;
+        val += curr_result;
+    }
+    return val;
+}
+
 fn main() {
     let gamma = get_gamma();
     println!("Gamma Values: {:?}", gamma);
     let ep = get_epsilon(&gamma);
     println!("Epsilon Values: {:?}", ep);
+
+    let gamma_decimal = get_decimal(&gamma);
+    let ep_decimal = get_decimal(&ep);
+    println!("Gamma Decimal: {}", gamma_decimal);
+    println!("Epsilon Decimal: {}", ep_decimal);
+
+    let multiplied = gamma_decimal * ep_decimal;
+    println!("Gamma * Epsilon: {}", multiplied);
 }
