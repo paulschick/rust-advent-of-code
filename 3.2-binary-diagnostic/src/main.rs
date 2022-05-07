@@ -88,6 +88,27 @@ fn get_val_from_row(row: &str, idx: u32) -> u32 {
     return val_int; 
 }
 
+fn get_max_in_col(values: &Vec<String>, col_index: u32) -> u32 {
+    let mut num_1 = 0;
+    let mut num_0 = 0;
+    let row_length = values.len();
+    for i in 0..row_length {
+        let row = &values[i];
+        let current_val = get_val_from_row(&row, col_index);
+        if current_val == 1u32 {
+            num_1 += 1;
+        } else {
+            num_0 += 1;
+        }
+    }
+
+    if num_1 > num_0 {
+        return 1u32;
+    } else {
+        return 0u32;
+    }
+}
+
 fn get_oxygen_rating(values: &Vec<String>, col_index: u32) -> Vec<String> {
     let row_length = values.len();
     let col_length = &values[0].len();
@@ -102,21 +123,8 @@ fn get_oxygen_rating(values: &Vec<String>, col_index: u32) -> Vec<String> {
         println!("continuing");
         let mut new_vec: Vec<String> = vec![];
 
-        let mut num_1 = 0;
-        let mut num_0 = 0;
-        for i in 0..row_length {
-            let row = &values[i];
-            let current_val = get_val_from_row(
-                &row,
-                col_index
-            );
-            if current_val == 1u32 {
-                num_1 += 1;
-            } else {
-                num_0 += 1;
-            }
-        }
-        if num_1 > num_0 {
+        let max_num = get_max_in_col(&values, col_index);
+        if max_num == 1u32 {
             for a in 0..row_length {
                 let row = &values[a];
                 let current_val = get_val_from_row(
@@ -149,8 +157,6 @@ fn get_oxygen_rating(values: &Vec<String>, col_index: u32) -> Vec<String> {
             return copy_vec(&new_vec);
         }
     }
-
-    // return vec!["Hello".to_owned()];
 }
 
 fn get_decimal(values: &Vec<u32>) -> u32 {
