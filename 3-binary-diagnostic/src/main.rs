@@ -154,44 +154,25 @@ pub mod tests {
 /// the this as powers of 2 is: 1(2^5)1(2^4)1(2^3)0(2^2)0(2^1)1(2^0)
 /// So the first number gets the highest power
 /// And the highest power is length - 1, because there's a 0 index
-fn convert_bin_to_decimal() {
-    let my_string: String = "111001".to_owned();
-    println!("Converting {}", my_string);
-    let highest_power = my_string.len() - 1;
-    println!("Highest power -> {}", highest_power);
-
+fn convert_bin_to_decimal(binary_string: &str) -> u32 {
+    let bstring: String = binary_string.to_owned();
+    let highest_power = bstring.len() - 1;
     let mut decimal_value: u32 = 0;
 
-    // include the highest number
     for i in 0..=highest_power {
-        println!("Current index {}", i);
         let current_power = highest_power - i;
-        println!("Current power {}", current_power);
-
-        let binary_char = my_string.chars().nth(i).unwrap();
-        println!("Current binary char -> {}", binary_char);
-
+        let bchar = bstring.chars().nth(i).unwrap();
         let base: u32 = 2;
-        let base_power = base.pow(current_power.try_into().unwrap());
-        println!("Base: {}, Base to power of {}: {}", base, current_power, base_power);
-
-        let binary_int: u32 = binary_char.to_digit(10).unwrap();
-        println!("Binary Int: {}", binary_int);
-
-        println!("{} * {}", binary_int, base_power);
-
-        let current_binary_result = binary_int * base_power;
-        println!("{}", current_binary_result);
-
-        decimal_value += current_binary_result;
-        println!("Current Decimal Value: {}", decimal_value);
+        let base_to_power = base.pow(current_power.try_into().unwrap());
+        let bint: u32 = bchar.to_digit(10).unwrap();
+        let current_result = bint * base_to_power;
+        decimal_value += current_result;
     }
 
-    println!("Final Decimal Value: {}", decimal_value);
+    return decimal_value;
 }
 
 fn main() {
-    // init_logger();
     println!("Getting file contents");
     let file_vec = file_contents::file_input();
     let mut array = nested_array::create_array(&file_vec);
@@ -205,5 +186,8 @@ fn main() {
 
     println!("Gamma string: {}, epsilon string: {}", gamma_string, epsilon_string);
 
-    convert_bin_to_decimal();
+    let gamma_decimal = convert_bin_to_decimal(&gamma_string);
+    println!("Gamma Decimal - {}", gamma_decimal);
+    let epsilon_decimal = convert_bin_to_decimal(&epsilon_string);
+    println!("Epsilon Decimal - {}", epsilon_decimal);
 }
