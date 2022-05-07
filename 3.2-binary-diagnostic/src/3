@@ -154,7 +154,7 @@ fn get_oxygen_rating(values: &Vec<String>, col_index: u32) -> String {
 
     // compare &usize to &usize
     let test_len = usize::try_from(1).unwrap();
-    if row_length == test_len {
+    if col_length == &test_len {
         let final_vec = copy_vec(values);
         return final_vec[0].to_owned();
     } else {
@@ -180,12 +180,28 @@ fn get_oxygen_rating(values: &Vec<String>, col_index: u32) -> String {
     }
 }
 
-fn get_scrubber_rating(values: &Vec<String>, col_index: u32) -> String {
+fn get_scrubber_rating(oxygen: &str) -> String {
+    let length = &oxygen.len();
+    let mut owned_string: String = "".to_owned();
+
+    for i in 0..*length {
+        let curr_char = &oxygen.chars().nth(i).unwrap();
+        let curr_digit: u32 = curr_char.to_digit(10).unwrap();
+        if curr_digit == 1u32 {
+            owned_string.push_str("0");
+        } else {
+            owned_string.push_str("1");
+        }
+    }
+    return owned_string;
+}
+
+fn get_scrubber_rating2(values: &Vec<String>, col_index: u32) -> String {
     let row_length = values.len();
     let col_length = &values[0].len();
     let test_len = usize::try_from(1).unwrap();
 
-    if row_length == test_len {
+    if col_length == &test_len {
         let final_vec = copy_vec(values);
         return final_vec[0].to_owned();
     } else {
@@ -202,7 +218,7 @@ fn get_scrubber_rating(values: &Vec<String>, col_index: u32) -> String {
         let next_comparitor = usize::try_from(next_index).unwrap();
         if &next_comparitor < col_length {
             let next_vec = copy_vec(&new_vec);
-            return get_scrubber_rating(&next_vec, next_index);
+            return get_scrubber_rating2(&next_vec, next_index);
         } else {
             let final_vec = copy_vec(&new_vec);
             return final_vec[0].to_owned();
@@ -238,19 +254,33 @@ fn get_decimal(values: &Vec<u32>) -> u32 {
 fn get_final_decimal() -> u32 {
     let contents: Vec<String> = file_contents::file_input();
     let oxygen_rating = get_oxygen_rating(&contents, 0u32);
+    let scrubber_rating = get_scrubber_rating(&oxygen_rating);
     println!("Oxygen Rating -> {}", oxygen_rating);
+    println!("Scrubber Rating -> {}", scrubber_rating);
     let oxygen_vec = string_to_u32_vec(&oxygen_rating);
+    let scrubber_vec = string_to_u32_vec(&scrubber_rating);
+    println!("Oxygen vec -> {:?}", oxygen_vec);
+    println!("Scrubber vec -> {:?}", scrubber_vec);
+
     let oxygen_decimal = get_decimal(&oxygen_vec);
+    let scrubber_decimal = get_decimal(&scrubber_vec);
     println!("Oxygen Decimal -> {}", oxygen_decimal);
-    let scrub_rating_2 = get_scrubber_rating(&contents, 0u32);
+    println!("Scrubber Decimal -> {}", scrubber_decimal);
+    let mult_value = oxygen_decimal * scrubber_decimal;
+    println!("Multiplied Value -> {}", mult_value);
+    // return mult_value;
+
+    println!("Scrubber Rating Version 2");
+    let scrub_rating_2 = get_scrubber_rating2(&contents, 0u32);
     let scrub_vec_2 = string_to_u32_vec(&scrub_rating_2);
     let scrub_dec_2 = get_decimal(&scrub_vec_2);
-    println!("Scrubber Rating -> {}", scrub_rating_2);
-    println!("Scrubber Decimal -> {}", scrub_dec_2);
-    let mult = scrub_dec_2 * oxygen_decimal;
-    println!("New Multiplied Value of {} and {} -> {}", oxygen_decimal, scrub_dec_2, mult);
+    println!("Scrubber 2 Rating -> {}", scrub_rating_2);
+    println!("Scrub 2 Decimal -> {}", scrub_dec_2);
 
-    return mult;
+    let mult2 = scrub_dec_2 * oxygen_decimal;
+    println!("New Multiplied Value of {} and {} -> {}", oxygen_decimal, scrub_dec_2, mult2);
+
+    return mult2;
 }
 
 fn main() {
