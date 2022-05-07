@@ -172,6 +172,17 @@ fn get_scrubber_rating(oxygen: &str) -> String {
     return owned_string;
 }
 
+fn string_to_u32_vec(value: &str) -> Vec<u32> {
+    let length = &value.len();              // number of chars
+    let mut values: Vec<u32> = vec![];      // initialize 
+    for i in 0..*length {                   // try parse to u32
+        let curr_char = value.chars().nth(i).unwrap();
+        let curr_int: u32 = curr_char.to_digit(10).unwrap();
+        values.push(curr_int);
+    }
+    return values;
+}
+
 fn get_decimal(values: &Vec<u32>) -> u32 {
     let highest_power = values.len() - 1;
     let mut val: u32 = 0;
@@ -186,10 +197,27 @@ fn get_decimal(values: &Vec<u32>) -> u32 {
     return val;
 }
 
-fn main() {
+fn get_final_decimal() -> u32 {
     let contents: Vec<String> = file_contents::file_input();
     let oxygen_rating = get_oxygen_rating(&contents, 0u32);
-    println!("Oxygen Rating -> {}", oxygen_rating);
     let scrubber_rating = get_scrubber_rating(&oxygen_rating);
+    println!("Oxygen Rating -> {}", oxygen_rating);
     println!("Scrubber Rating -> {}", scrubber_rating);
+    let oxygen_vec = string_to_u32_vec(&oxygen_rating);
+    let scrubber_vec = string_to_u32_vec(&scrubber_rating);
+    println!("Oxygen vec -> {:?}", oxygen_vec);
+    println!("Scrubber vec -> {:?}", scrubber_vec);
+
+    let oxygen_decimal = get_decimal(&oxygen_vec);
+    let scrubber_decimal = get_decimal(&scrubber_vec);
+    println!("Oxygen Decimal -> {}", oxygen_decimal);
+    println!("Scrubber Decimal -> {}", scrubber_decimal);
+    let mult_value = oxygen_decimal * scrubber_decimal;
+    println!("Multiplied Value -> {}", mult_value);
+    return mult_value;
+}
+
+fn main() {
+    let solution: u32 = get_final_decimal();
+    println!("Solution.. main -> {}", solution);
 }
