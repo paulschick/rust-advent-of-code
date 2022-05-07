@@ -47,3 +47,20 @@ Nothing complicated here.
 I've been using just like `unwrap()` and `expect()`. Maybe that's enough? This is something to learn more about.
 That might not make it in for day three, though.
 
+## Matrix / Multi-Dimensional Arrays
+
+[Here is a matrix crate](https://docs.rs/matrix/latest/matrix/), that's one option.
+An alternative to that would be [array2d](https://docs.rs/array2d/latest/array2d/).
+I think the latter is going to be more in line with the appropriate option.
+
+Alternatively, just define an array with multiple dimensions.
+I will have to initialize this with a size. I know the size ahead of time, because I have
+all of the records in the `vec`.
+So that makes it a lot more simple in this case.
+
+Now, for a multiple dimension array to be valuable, I have to split every character in every string.
+So one of the nested arrays contains each of the bits in a single binary string.
+
+Width -> equal to the number of characters in one string of bits
+Length -> equal to the number of bit strings. the length of the vec created when the file is read.
+
