@@ -114,6 +114,23 @@ fn board_row_to_ints(line: &str) -> Vec<u32> {
         .collect()
 }
 
+fn parse_board_block(lines: &Vec<String>, start_index: u32) -> BingoBoard {
+    let first_line = &lines[usize::try_from(start_index).unwrap()];
+    let last_index = start_index + 4u32;
+    let last_line = &lines[usize::try_from(last_index).unwrap()];
+    if last_line == "" {
+        panic!("Starting index does not correspond to a 5-line matrix");
+    }
+    let mut board_ints: Vec<Vec<u32>> = vec![];
+    for i in start_index..=last_index {
+        let line = &lines[usize::try_from(i).unwrap()];
+        let row = board_row_to_ints(&line);
+        board_ints.push(row);
+    }
+
+    return BingoBoard::new(&board_ints);
+}
+
 /// This should return some kind of data structure that makes sense
 /// in the context of the bingo input
 ///
@@ -135,13 +152,53 @@ fn parse_bingo_input() {
     let game_numbers = handle_game_numbers(&lines[0]);
     println!("{:?}", game_numbers);
 
-    for i in 1..lines.len() {
-        let line = &lines[i];
-        if line != "" {
-            let row_vals = board_row_to_ints(line);
-            println!("{:?}", row_vals);
-        }
-    }
+    // for i in 1..lines.len() {
+    //     let line = &lines[i];
+    //     if line != "" {
+    //         let row_vals = board_row_to_ints(line);
+    //         println!("{:?}", row_vals);
+    //     }
+    // }
+
+    // testing
+    // parse_board_block(&lines, 2u32);
+    // let first_line = 2u32;
+    // let interval = 4u32;
+
+
+    // Commented to test the parse_board_block function
+
+    // let mut n = true;
+    // let start_index = 2u32;
+    // let interval = 4u32;
+    // let last_index = lines.len() - 1;
+    // let last_block_start = last_index - 4;
+    // let mut used_indices: Vec<u32> = vec![];
+    // let mut game_boards: Vec<BingoBoard> = vec![];
+
+    // while n == true {
+    //     if used_indices.len() == 0 {
+    //         // then use start index
+    //         let board = parse_board_block(&lines, start_index);
+    //         game_boards.push(board);
+    //         used_indices.push(start_index);
+    //     } else {
+    //         let last_idx = used_indices.last().unwrap();
+    //         println!("Last Used Index: {}", last_idx);
+    //
+    //         // Need to be able to compare &u32 with &u32
+    //         let last_valid_index: u32 = last_index as u32;
+    //         if last_idx == &last_valid_index {
+    //             println!("hit last index");
+    //             n = false;
+    //         }
+    //
+    //         println!("exiting for testing");
+    //     }
+    // }
+
+    let board_test = parse_board_block(&lines, 2u32);
+    println!("{:?}", board_test);
 }
 
 fn main() {
