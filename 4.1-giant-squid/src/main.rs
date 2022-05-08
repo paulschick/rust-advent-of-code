@@ -31,6 +31,12 @@ pub struct BingoBoard {
     pub unselected_answers: Vec<Answer>,
 }
 
+#[derive(Debug)]
+pub struct BingoGame {
+    pub borads: Vec<BingoBoard>,
+    pub game_numbers: Vec<u32>,
+}
+
 fn copy_vec<T: Clone>(vec: &Vec<T>) -> Vec<T> {
     let vec = vec.clone();
     return vec;
@@ -93,6 +99,21 @@ impl BingoBoard {
     }
 }
 
+fn handle_game_numbers(line: &str) -> Vec<u32> {
+    return line
+        .split(",")
+        .map(|v| v.to_owned().parse::<u32>().unwrap())
+        .collect();
+}
+
+fn board_row_to_ints(line: &str) -> Vec<u32> {
+    line
+        .split(" ")
+        .filter(|v| v != &"")
+        .map(|v| v.to_owned().parse::<u32>().unwrap())
+        .collect()
+}
+
 /// This should return some kind of data structure that makes sense
 /// in the context of the bingo input
 ///
@@ -105,22 +126,36 @@ fn parse_bingo_input() {
     let file = File::open("input.txt")
         .expect("File not found!");
     let buf = BufReader::new(file);
+
     let lines: Vec<String> = buf
         .lines()
         .map(|l| l.expect("Unable to parse line!"))
         .collect();
+
+    let game_numbers = handle_game_numbers(&lines[0]);
+    println!("{:?}", game_numbers);
+
+    for i in 1..lines.len() {
+        let line = &lines[i];
+        if line != "" {
+            let row_vals = board_row_to_ints(line);
+            println!("{:?}", row_vals);
+        }
+    }
 }
 
 fn main() {
-    let mut test_board_values: Vec<Vec<u32>> = vec![];
+    // let mut test_board_values: Vec<Vec<u32>> = vec![];
+    //
+    // test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
+    // test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
+    // test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
+    // test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
+    // test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
+    //
+    // let test_board = BingoBoard::new(&test_board_values);
 
-    test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
-    test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
-    test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
-    test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
-    test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
+    // println!("{:?}", test_board);
 
-    let test_board = BingoBoard::new(&test_board_values);
-
-    println!("{:?}", test_board);
+    parse_bingo_input();
 }
