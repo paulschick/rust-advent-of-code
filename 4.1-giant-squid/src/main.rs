@@ -33,7 +33,7 @@ pub struct BingoBoard {
 
 #[derive(Debug)]
 pub struct BingoGame {
-    pub borads: Vec<BingoBoard>,
+    pub boards: Vec<BingoBoard>,
     pub game_numbers: Vec<u32>,
 }
 
@@ -131,15 +131,10 @@ fn parse_board_block(lines: &Vec<String>, start_index: u32) -> BingoBoard {
     return BingoBoard::new(&board_ints);
 }
 
-/// This should return some kind of data structure that makes sense
-/// in the context of the bingo input
+/// Reads in the input data, returns the BingoGame data structure
 ///
-/// I might want to use a struct or something. The numbers to be
-/// drawn are different from each of the boards. The boards are 5x5.
-///
-/// Since they're known, I think actually a struct would work decently
-/// here.
-fn parse_bingo_input() {
+/// BIGTODO -> need to break this up. This function is insane.
+fn parse_bingo_input() -> BingoGame {
     let file = File::open("input.txt")
         .expect("File not found!");
     let buf = BufReader::new(file);
@@ -152,67 +147,66 @@ fn parse_bingo_input() {
     let game_numbers = handle_game_numbers(&lines[0]);
     println!("{:?}", game_numbers);
 
-    // for i in 1..lines.len() {
-    //     let line = &lines[i];
-    //     if line != "" {
-    //         let row_vals = board_row_to_ints(line);
-    //         println!("{:?}", row_vals);
-    //     }
-    // }
+    let mut n = true;
+    let start_index = 2u32;
+    let interval = 4u32;
+    let last_index = lines.len() - 1;
+    let last_block_start = last_index - 4;
+    let mut used_indices: Vec<u32> = vec![];
+    let mut game_boards: Vec<BingoBoard> = vec![];
 
-    // testing
-    // parse_board_block(&lines, 2u32);
-    // let first_line = 2u32;
-    // let interval = 4u32;
+    while n == true {
+        if used_indices.len() == 0 {
+            // then use start index
+            let board = parse_board_block(&lines, start_index);
+            game_boards.push(board);
+            used_indices.push(start_index);
+        } else {
+            let last_idx = used_indices.last().unwrap();
+            println!("Last Used Index: {}", last_idx);
 
+            // Need to be able to compare &u32 with &u32
+            let last_valid_index: u32 = last_index as u32;
+            if last_idx == &last_valid_index {
+                println!("hit last index");
+                n = false;
+            } else {
+                let next_blank = last_idx + interval + 1;
+                let next_blank_usize = usize::try_from(next_blank).unwrap();
 
-    // Commented to test the parse_board_block function
+                if next_blank >= last_index as u32 {
+                    println!("Hit the end");
+                    n = false;
+                } else {
+                    let next_blank_line = &lines[next_blank_usize];
 
-    // let mut n = true;
-    // let start_index = 2u32;
-    // let interval = 4u32;
-    // let last_index = lines.len() - 1;
-    // let last_block_start = last_index - 4;
-    // let mut used_indices: Vec<u32> = vec![];
-    // let mut game_boards: Vec<BingoBoard> = vec![];
+                    if next_blank_line != "" {
+                        panic!("Expected a blank line at index {}, got {}", next_blank, next_blank_line);
+                    }
 
-    // while n == true {
-    //     if used_indices.len() == 0 {
-    //         // then use start index
-    //         let board = parse_board_block(&lines, start_index);
-    //         game_boards.push(board);
-    //         used_indices.push(start_index);
-    //     } else {
-    //         let last_idx = used_indices.last().unwrap();
-    //         println!("Last Used Index: {}", last_idx);
-    //
-    //         // Need to be able to compare &u32 with &u32
-    //         let last_valid_index: u32 = last_index as u32;
-    //         if last_idx == &last_valid_index {
-    //             println!("hit last index");
-    //             n = false;
-    //         }
-    //
-    //         println!("exiting for testing");
-    //     }
-    // }
+                    let next_valid_index = next_blank + 1;
+                    let test_next_valid_usize = usize::try_from(next_valid_index).unwrap();
+                    let next_valid_line = &lines[test_next_valid_usize];
 
-    let board_test = parse_board_block(&lines, 2u32);
-    println!("{:?}", board_test);
+                    if next_valid_line == "" {
+                        panic!("Expected a valid line at index {}, received blank", next_valid_line);
+                    }
+
+                    let board = parse_board_block(&lines, next_valid_index);
+                    game_boards.push(board);
+                    used_indices.push(next_valid_index);
+                }
+            }
+        }
+    }
+
+    return BingoGame {
+        boards: game_boards,
+        game_numbers,
+    };
 }
 
 fn main() {
-    // let mut test_board_values: Vec<Vec<u32>> = vec![];
-    //
-    // test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
-    // test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
-    // test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
-    // test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
-    // test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
-    //
-    // let test_board = BingoBoard::new(&test_board_values);
-
-    // println!("{:?}", test_board);
-
-    parse_bingo_input();
+    let game = parse_bingo_input();
+    println!("{:?}", game);
 }
