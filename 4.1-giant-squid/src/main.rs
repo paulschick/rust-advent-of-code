@@ -31,6 +31,68 @@ pub struct BingoBoard {
     pub unselected_answers: Vec<Answer>,
 }
 
+fn copy_vec<T: Clone>(vec: &Vec<T>) -> Vec<T> {
+    let vec = vec.clone();
+    return vec;
+}
+
+impl BingoBoard {
+    pub fn new(board: &Vec<Vec<u32>>) -> Self {
+        let row_length = board.len();
+        let col_length = board[0].len();
+
+        let test_length = usize::try_from(5).unwrap();
+        if row_length != test_length || col_length != test_length {
+            panic!("Unable to process board. Expected length 5 received row: {}, col: {}", row_length, col_length);
+        } 
+
+        let mut bingo_rows: Vec<BingoRow> = vec![];
+        let mut bingo_cols: Vec<BingoColumn> = vec![];
+        let mut unselected_answers: Vec<Answer> = vec![];
+        let selected_answers: Vec<Answer> = vec![];
+
+        for i in 0..col_length {
+            let mut col: Vec<u32> = vec![];
+
+            for a in 0..row_length {
+                let row = &board[a];
+                let column_value = &row[i];
+
+                col.push(*column_value);
+
+                if bingo_rows.len() < 5 {
+                    let bingo_row = BingoRow {
+                        data: copy_vec(&row),
+                        index: a as u32,
+                    };
+
+                    bingo_rows.push(bingo_row);
+                }
+
+                let answer = Answer {
+                    value: *column_value,
+                    row_index: a as u32,
+                    col_index: i as u32,
+                };
+                unselected_answers.push(answer);
+            } 
+
+            let bingo_col = BingoColumn {
+                data: copy_vec(&col),
+                index: i as u32,
+            };
+            bingo_cols.push(bingo_col);
+        }
+
+        return BingoBoard {
+            rows: bingo_rows,
+            columns: bingo_cols,
+            selected_answers,
+            unselected_answers,
+        };
+    }
+}
+
 /// This should return some kind of data structure that makes sense
 /// in the context of the bingo input
 ///
@@ -43,12 +105,22 @@ fn parse_bingo_input() {
     let file = File::open("input.txt")
         .expect("File not found!");
     let buf = BufReader::new(file);
-    let lines = buf
+    let lines: Vec<String> = buf
         .lines()
         .map(|l| l.expect("Unable to parse line!"))
         .collect();
 }
 
 fn main() {
-    println!("Hello, world!");
+    let mut test_board_values: Vec<Vec<u32>> = vec![];
+
+    test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
+    test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
+    test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
+    test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
+    test_board_values.push(vec![1u32,2u32,3u32,4u32,5u32]);
+
+    let test_board = BingoBoard::new(&test_board_values);
+
+    println!("{:?}", test_board);
 }

@@ -1,5 +1,7 @@
 # Day 4
 
+[Day 4](https://adventofcode.com/2021/day/4)
+
 Two types of data in the input file:
 
 - Numbers to be drawn
