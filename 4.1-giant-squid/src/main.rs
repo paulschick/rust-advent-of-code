@@ -145,7 +145,7 @@ fn parse_bingo_input() -> BingoGame {
         .collect();
 
     let game_numbers = handle_game_numbers(&lines[0]);
-    println!("{:?}", game_numbers);
+    // println!("{:?}", game_numbers);
 
     let mut n = true;
     let start_index = 2u32;
@@ -163,19 +163,19 @@ fn parse_bingo_input() -> BingoGame {
             used_indices.push(start_index);
         } else {
             let last_idx = used_indices.last().unwrap();
-            println!("Last Used Index: {}", last_idx);
+            // println!("Last Used Index: {}", last_idx);
 
             // Need to be able to compare &u32 with &u32
             let last_valid_index: u32 = last_index as u32;
             if last_idx == &last_valid_index {
-                println!("hit last index");
+                // println!("hit last index");
                 n = false;
             } else {
                 let next_blank = last_idx + interval + 1;
                 let next_blank_usize = usize::try_from(next_blank).unwrap();
 
                 if next_blank >= last_index as u32 {
-                    println!("Hit the end");
+                    // println!("Hit the end");
                     n = false;
                 } else {
                     let next_blank_line = &lines[next_blank_usize];
@@ -206,7 +206,20 @@ fn parse_bingo_input() -> BingoGame {
     };
 }
 
+/// Goal -> this is going to calculate all of the starting indexes for each of the Bingo
+/// Boards. This should take away some of the mess so that the main parsing function
+/// doesn't have to do a bunch of nested ifs
+///
+/// 1. We know that index 2 is the first line of the first board
+/// 2. We know that 2 + 4 is the last line of the first board (6)
+/// 3. We know that the index after a board's last index is a blank line
+/// 4. We know that if our proposed start index or last index for a given board is equal
+/// or greater than the length of the vector of strings, then we're done.
+fn derive_start_indexes() {
+
+}
+
 fn main() {
     let game = parse_bingo_input();
-    println!("{:?}", game);
+    println!("{:?}", game.boards[0]);
 }
